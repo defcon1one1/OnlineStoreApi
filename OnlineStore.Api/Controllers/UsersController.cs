@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace OnlineStore.Api.Controllers;
@@ -6,4 +7,15 @@ namespace OnlineStore.Api.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+    {
+        return Ok();
+    }
+    [HttpPost]
+    public async Task<IActionResult> Logout([FromBody] LoginRequest loginRequest)
+    {
+        return Ok();
+    }
 }
