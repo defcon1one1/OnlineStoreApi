@@ -2,11 +2,11 @@
 using OnlineStore.Domain.Repositories;
 
 namespace OnlineStore.Infrastructure.DAL.Repositories;
-public class ProductRepository(AppDbContext dbContext) : IProductRepository
+public class UserRepository(AppDbContext dbContext) : IUserRepository
 {
     private readonly AppDbContext _dbContext = dbContext;
 
-    public Task<Product?> GetByIdAsync(Guid id)
+    public async Task<User?> GetById(Guid id)
     {
         throw new NotImplementedException();
     }
