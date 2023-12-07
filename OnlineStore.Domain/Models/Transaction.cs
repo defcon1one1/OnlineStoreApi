@@ -39,5 +39,6 @@ public enum TransactionStatus
 {
     Pending,
     Accepted,
-    Rejected
+    Rejected,
+    Closed
 }

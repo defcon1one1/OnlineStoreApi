@@ -16,18 +16,6 @@ public class AppDbContext : DbContext
     public AppDbContext()
     {
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseInMemoryDatabase("OnlineStoreDb");
-        }
-
-        base.OnConfiguring(optionsBuilder);
-    }
-
-    // Optional: You can override OnModelCreating to further configure the model
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

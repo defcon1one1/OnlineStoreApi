@@ -8,7 +8,11 @@ public class TransactionEntity
     public Guid CustomerId { get; set; }
     public decimal OriginalPrice { get; set; }
     public decimal CustomerOffer { get; set; }
+    public int Revisions { get; set; }
     public TransactionStatus Status { get; set; } = TransactionStatus.Pending;
+    public ProductEntity Product { get; set; } = new();
+    public UserEntity User { get; set; } = new();
+
     public Transaction ToTransaction()
     {
         return new Transaction(TransactionId, ProductId, CustomerOffer, CustomerId, Status, OriginalPrice);

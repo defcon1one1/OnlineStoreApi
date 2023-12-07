@@ -7,6 +7,8 @@ public class UserEntity
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public UserRole Role { get; set; } = UserRole.Customer;
+    public List<TransactionEntity> Transactions { get; set; } = [];
+
     public User ToUser()
     {
         return new User(Id, Email, PasswordHash, Role);
