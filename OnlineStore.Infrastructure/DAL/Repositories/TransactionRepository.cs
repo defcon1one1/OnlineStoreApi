@@ -8,9 +8,9 @@ namespace OnlineStore.Infrastructure.DAL.Repositories;
 public class TransactionRepository(AppDbContext dbContext) : ITransactionRepository
 {
     private readonly AppDbContext _dbContext = dbContext;
-    public async Task<List<Transaction>> GetAllAsync()
+    public async Task<List<Transaction>> GetAllAsync(CancellationToken cancellationToken)
     {
-        List<TransactionEntity> transactionEntities = await _dbContext.Transactions.ToListAsync();
+        List<TransactionEntity> transactionEntities = await _dbContext.Transactions.ToListAsync(cancellationToken: cancellationToken);
         return transactionEntities.Select(transactionEntity => transactionEntity.ToTransaction()).ToList();
     }
     public async Task<List<Transaction>> GetByStatusAsync(TransactionStatus status)
@@ -19,12 +19,12 @@ public class TransactionRepository(AppDbContext dbContext) : ITransactionReposit
         return transactionEntities.Select(t => t.ToTransaction()).ToList();
     }
 
-    public async Task<Transaction?> GetByIdAsync(Guid id)
+    public async Task<Transaction?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         TransactionEntity? transactionEntity = await GetEntityByIdAsync(id);
         return transactionEntity?.ToTransaction();
     }
-    public async Task AddAsync(Transaction transaction)
+    public async Task<Guid> AddAsync(Transaction transaction)
     {
         TransactionEntity transactionEntity = TransactionEntity.FromTransaction(transaction);
 
@@ -32,6 +32,7 @@ public class TransactionRepository(AppDbContext dbContext) : ITransactionReposit
         {
             await _dbContext.Transactions.AddAsync(transactionEntity);
             await _dbContext.SaveChangesAsync();
+            return transactionEntity.TransactionId;
         }
         catch (Exception ex)
         {

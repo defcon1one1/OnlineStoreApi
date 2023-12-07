@@ -1,38 +1,34 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using OnlineStore.Domain.Models;
+using OnlineStore.Domain.Products.Commands.AddProduct;
+using OnlineStore.Domain.Products.Queries.GetProductById;
+using OnlineStore.Domain.Products.Queries.GetProductsQuery;
 
 namespace OnlineStore.Api.Controllers;
-[Route("api/[controller]")]
+[Route("api/product")]
 [ApiController]
-public class ProductsController : ControllerBase
+public class ProductsController(IMediator mediator) : ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAllProducts()
-    {
-        return Ok();
-    }
-    [HttpGet]
-    public async Task<IActionResult> GetProductById()
-    {
-        return Ok();
-    }
+    private readonly IMediator _mediator = mediator;
 
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        IReadOnlyCollection<Product> products = await _mediator.Send(new GetAllProductsQuery(), cancellationToken);
+        return Ok(products);
+    }
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        Product product = await _mediator.Send(new GetProductByIdQuery(id), cancellationToken);
+        return Ok(product);
+    }
     [HttpPost]
-    [Authorize] // for employer
-    public async Task<IActionResult> AddProduct()
+    public async Task<IActionResult> Add([FromBody] AddProductData addProductData)
     {
-        return Ok();
-    }
-    [HttpPut]
-    [Authorize] // for employer
-    public async Task<IActionResult> EditProduct()
-    {
-        return Ok();
-    }
-    [HttpDelete]
-    [Authorize] // for employer
-    public async Task<IActionResult> DeleteProduct()
-    {
-        return Ok();
+        Guid guid = await _mediator.Send(new AddProductCommand(addProductData));
+        return Ok(guid);
     }
 }

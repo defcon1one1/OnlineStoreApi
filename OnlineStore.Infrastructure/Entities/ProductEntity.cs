@@ -7,7 +7,6 @@ public class ProductEntity
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public decimal Price { get; set; }
-    public List<TransactionEntity> Transactions { get; set; } = [];
     public Product ToProduct()
     {
         return new Product(Id, Name, Description, Price);

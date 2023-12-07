@@ -10,29 +10,23 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
 {
     private readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<List<Product>> GetAllAsync()
+    public async Task<List<Product>> GetAllAsync(CancellationToken cancellationToken)
     {
-        List<ProductEntity> productEntities = await _dbContext.Products.ToListAsync();
+        List<ProductEntity> productEntities = await _dbContext.Products.ToListAsync(cancellationToken: cancellationToken);
         return productEntities.Select(productEntity => productEntity.ToProduct()).ToList();
     }
 
-    public async Task<Product?> GetByIdAsync(Guid id)
+    public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         ProductEntity? productEntity = await GetEntityByIdAsync(id);
         return productEntity?.ToProduct();
     }
-    public async Task AddAsync(Product product)
+    public async Task<Guid> AddAsync(Product product)
     {
-        try
-        {
-            ProductEntity productEntity = ProductEntity.FromProduct(product);
-            await _dbContext.Products.AddAsync(productEntity);
-            await _dbContext.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new DatabaseOperationException($"Add product operation failed: {ex.Message}");
-        }
+        ProductEntity productEntity = ProductEntity.FromProduct(product);
+        await _dbContext.Products.AddAsync(productEntity);
+        await _dbContext.SaveChangesAsync();
+        return productEntity.Id;
     }
     public async Task DeleteAsync(Guid id)
     {
