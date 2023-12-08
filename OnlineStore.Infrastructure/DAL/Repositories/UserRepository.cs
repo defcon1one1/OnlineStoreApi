@@ -7,9 +7,9 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
 {
     private readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<User?> GetByIdAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        UserEntity? userEntity = await _dbContext.Users.FindAsync(id);
+        UserEntity? userEntity = await _dbContext.Users.FindAsync([id], cancellationToken: cancellationToken);
         return userEntity?.ToUser();
     }
     public bool VerifyLogin(string email, string passwordHash, out Guid id)
@@ -18,5 +18,11 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
             .FirstOrDefault(u => u.Email == email && u.PasswordHash == passwordHash);
         id = user is null ? Guid.Empty : user.Id;
         return user is not null;
+    }
+
+    public List<Transaction> GetUserTransactions(Guid id)
+    {
+        List<TransactionEntity> transactionEntities = [.. _dbContext.Transactions.Where(t => t.UserId == id)];
+        return transactionEntities.Select(t => t.ToTransaction()).ToList();
     }
 }

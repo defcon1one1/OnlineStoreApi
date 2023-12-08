@@ -13,11 +13,6 @@ public class TransactionRepository(AppDbContext dbContext) : ITransactionReposit
         List<TransactionEntity> transactionEntities = await _dbContext.Transactions.ToListAsync(cancellationToken: cancellationToken);
         return transactionEntities.Select(transactionEntity => transactionEntity.ToTransaction()).ToList();
     }
-    public async Task<List<Transaction>> GetByStatusAsync(TransactionStatus status)
-    {
-        List<TransactionEntity> transactionEntities = await _dbContext.Transactions.Where(t => t.Status == status).ToListAsync();
-        return transactionEntities.Select(t => t.ToTransaction()).ToList();
-    }
 
     public async Task<Transaction?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {

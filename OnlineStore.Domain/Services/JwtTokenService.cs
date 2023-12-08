@@ -11,18 +11,16 @@ public interface IJwtService
     string GenerateJwtToken(User user);
 }
 
-public class JwtService : IJwtService
+public class JwtService(IConfiguration configuration) : IJwtService
 {
-    private readonly IConfiguration _configuration;
+    private readonly IConfiguration _configuration = configuration;
 
-    public JwtService(IConfiguration configuration)
+    public string GenerateJwtToken(User? user)
     {
-        _configuration = configuration;
-    }
-
-    public string GenerateJwtToken(User user)
-    {
+        if (user is null) return string.Empty;
+#pragma warning disable CS8604 // Possible null reference argument.
         SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));
+#pragma warning restore CS8604 // Possible null reference argument.
         SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
 
         // Include user roles in the claims

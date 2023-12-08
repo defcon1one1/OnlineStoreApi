@@ -22,8 +22,9 @@ public class LoginCommandHandler
         }
         else
         {
-            User? user = await _userRepository.GetByIdAsync(id);
-            string? token = _jwtService.GenerateJwtToken(user);
+            User? user = await _userRepository.GetByIdAsync(id, cancellationToken);
+            string token = string.Empty;
+            if (user is not null) token = _jwtService.GenerateJwtToken(user);
             return await Task.FromResult(new LoginResponse(true, id, token));
         }
     }

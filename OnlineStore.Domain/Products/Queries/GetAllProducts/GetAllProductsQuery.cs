@@ -2,7 +2,7 @@
 using OnlineStore.Domain.Models;
 using OnlineStore.Domain.Repositories;
 
-namespace OnlineStore.Domain.Products.Queries.GetProductsQuery;
+namespace OnlineStore.Domain.Products.Queries.GetAllProducts;
 public record GetAllProductsQuery() : IRequest<IReadOnlyCollection<Product>>;
 
 internal class GetAllProductsQueryHandler(IProductRepository productRepository) : IRequestHandler<GetAllProductsQuery, IReadOnlyCollection<Product>>

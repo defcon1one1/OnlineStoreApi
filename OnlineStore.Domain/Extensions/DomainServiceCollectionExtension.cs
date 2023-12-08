@@ -29,5 +29,6 @@ public static class DomainServiceCollectionExtension
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JwtSettings:Key"]))
             };
         });
+
     }
 }

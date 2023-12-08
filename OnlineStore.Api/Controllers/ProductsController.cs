@@ -5,36 +5,25 @@ using OnlineStore.Domain.Models;
 using OnlineStore.Domain.Products.Commands.AddProduct;
 using OnlineStore.Domain.Products.Commands.DeleteProduct;
 using OnlineStore.Domain.Products.Commands.UpdateProduct;
+using OnlineStore.Domain.Products.Queries.GetAllProducts;
 using OnlineStore.Domain.Products.Queries.GetProductById;
-using OnlineStore.Domain.Products.Queries.GetProductsQuery;
-using OnlineStore.Domain.Services;
 
 namespace OnlineStore.Api.Controllers;
 
 [Route("api/product")]
 [ApiController]
-public class ProductsController : ControllerBase
+public class ProductsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-    private readonly IJwtService _jwtService;
-
-    public ProductsController(IMediator mediator, IJwtService jwtService)
-    {
-        _mediator = mediator;
-        _jwtService = jwtService;
-    }
+    private readonly IMediator _mediator = mediator;
 
     [HttpGet]
-    [Authorize]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
         IReadOnlyCollection<Product> products = await _mediator.Send(new GetAllProductsQuery(), cancellationToken);
         return Ok(products);
     }
 
-    [HttpGet]
-    [Authorize]
-    [Route("{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         Product? product = await _mediator.Send(new GetProductByIdQuery(id), cancellationToken);
@@ -58,9 +47,8 @@ public class ProductsController : ControllerBase
         return updated ? NoContent() : NotFound(); // command returns false when the product of {id} was not found in the database
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [Authorize(Roles = "Employee,Admin")]
-    [Route("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         bool deleted = await _mediator.Send(new DeleteProductCommand(id));
