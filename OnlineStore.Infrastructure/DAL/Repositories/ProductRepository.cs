@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Products.Commands.UpdateProduct;
 using OnlineStore.Domain.Repositories;
 using OnlineStore.Infrastructure.Entities;
 using OnlineStore.Infrastructure.Exceptions;
@@ -34,16 +33,21 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
         _dbContext.Remove(productEntity);
         await _dbContext.SaveChangesAsync();
     }
-    public async Task UpdateAsync(Guid id, UpdateProductData updateData)
+    public async Task UpdateAsync(Product newProduct)
     {
-        ProductEntity? productEntity = await GetEntityByIdAsync(id) ?? throw new DatabaseOperationException("Update operation failed: product not found.");
-        if (updateData is null) throw new DatabaseOperationException("Update operation failed: update data is null.");
-
-        productEntity.Price = updateData.Price;
-        productEntity.Description = updateData.Description;
-        productEntity.Name = updateData.Name;
-        _dbContext.Products.Update(productEntity);
-        await _dbContext.SaveChangesAsync();
+        ProductEntity? currentProduct = await GetEntityByIdAsync(newProduct.Id) ?? throw new DatabaseOperationException("Update operation failed: product not found.");
+        try
+        {
+            currentProduct.Price = newProduct.Price;
+            currentProduct.Name = newProduct.Name;
+            currentProduct.Description = newProduct.Description;
+            _dbContext.Products.Update(currentProduct);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new DatabaseOperationException($"Update operation failed: {ex.Message}");
+        }
     }
 
     private async Task<ProductEntity?> GetEntityByIdAsync(Guid id)
