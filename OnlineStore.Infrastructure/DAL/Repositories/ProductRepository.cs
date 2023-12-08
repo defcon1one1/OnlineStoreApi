@@ -9,9 +9,10 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
 {
     private readonly AppDbContext _dbContext = dbContext;
 
-    public async Task<List<Product>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<List<Product>> GetAllAsync(string searchPhrase, CancellationToken cancellationToken)
     {
-        List<ProductEntity> productEntities = await _dbContext.Products.ToListAsync(cancellationToken: cancellationToken);
+        List<ProductEntity> productEntities
+            = await _dbContext.Products.Where(p => p.Name.Contains(searchPhrase, StringComparison.CurrentCultureIgnoreCase)).ToListAsync(cancellationToken: cancellationToken);
         return productEntities.Select(productEntity => productEntity.ToProduct()).ToList();
     }
 

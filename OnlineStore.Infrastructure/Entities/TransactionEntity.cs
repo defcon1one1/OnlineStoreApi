@@ -9,7 +9,7 @@ public class TransactionEntity
     public decimal OriginalPrice { get; set; }
     public decimal CustomerOffer { get; set; }
     public int Revisions { get; set; }
-    public TransactionStatus Status { get; set; } = TransactionStatus.Pending;
+    public TransactionStatus Status { get; set; }
 
     public Transaction ToTransaction()
     {

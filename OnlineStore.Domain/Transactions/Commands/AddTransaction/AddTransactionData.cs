@@ -1,4 +1,2 @@
 ﻿namespace OnlineStore.Domain.Transactions.Commands.AddTransaction;
-public class AddTransactionCommandValidator
-{
-}
+public record AddTransactionData(Guid ProductId, decimal Offer);

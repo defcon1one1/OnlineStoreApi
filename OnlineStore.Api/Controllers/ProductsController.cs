@@ -17,9 +17,10 @@ public class ProductsController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] string? searchPhrase, CancellationToken cancellationToken)
     {
-        IReadOnlyCollection<Product> products = await _mediator.Send(new GetAllProductsQuery(), cancellationToken);
+        searchPhrase ??= string.Empty;
+        IReadOnlyCollection<Product> products = await _mediator.Send(new GetAllProductsQuery(searchPhrase), cancellationToken);
         return Ok(products);
     }
 
@@ -35,7 +36,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Add([FromBody] AddProductData addProductData)
     {
         Guid? guid = await _mediator.Send(new AddProductCommand(addProductData));
-        return guid.HasValue ? Created() : BadRequest();
+        return guid.HasValue ? CreatedAtAction(nameof(Add), guid) : BadRequest();
     }
 
     [HttpPut]

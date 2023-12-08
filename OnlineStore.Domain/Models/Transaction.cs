@@ -7,8 +7,21 @@ public class Transaction
     public Guid CustomerId { get; private set; }
     public decimal OriginalPrice { get; private set; }
     public decimal CustomerOffer { get; private set; }
-    public TransactionStatus Status { get; private set; }
+    public TransactionStatus Status { get; private set; } = TransactionStatus.Pending;
 
+    public Transaction(
+        Guid id,
+        Guid productId,
+        decimal customerOffer,
+        Guid customerId,
+        decimal originalPrice)
+    {
+        TransactionId = id;
+        ProductId = productId;
+        CustomerId = customerId;
+        OriginalPrice = originalPrice;
+        CustomerOffer = ValidateOffer(customerOffer);
+    }
     public Transaction(
         Guid id,
         Guid productId,
@@ -21,8 +34,8 @@ public class Transaction
         ProductId = productId;
         CustomerId = customerId;
         OriginalPrice = originalPrice;
-        CustomerOffer = ValidateOffer(customerOffer);
         Status = status;
+        CustomerOffer = ValidateOffer(customerOffer);
     }
 
     private decimal ValidateOffer(decimal offer)

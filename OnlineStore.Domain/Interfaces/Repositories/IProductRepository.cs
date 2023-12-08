@@ -3,7 +3,7 @@
 namespace OnlineStore.Domain.Repositories;
 public interface IProductRepository
 {
-    Task<List<Product>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<Product>> GetAllAsync(string searchPhrase, CancellationToken cancellationToken);
     Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<Guid> AddAsync(Product product);
     Task UpdateAsync(Product product);

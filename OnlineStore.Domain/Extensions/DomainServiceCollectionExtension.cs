@@ -22,12 +22,14 @@ public static class DomainServiceCollectionExtension
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(options =>
         {
+#pragma warning disable CS8604 // Possible null reference argument.
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JwtSettings:Key"]))
             };
+#pragma warning restore CS8604 // Possible null reference argument.
         });
 
     }
