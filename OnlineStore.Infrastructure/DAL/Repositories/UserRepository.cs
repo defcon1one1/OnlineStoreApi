@@ -12,4 +12,11 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
         UserEntity? userEntity = await _dbContext.Users.FindAsync(id);
         return userEntity?.ToUser();
     }
+    public bool VerifyLogin(string email, string passwordHash, out Guid id)
+    {
+        UserEntity? user = _dbContext.Users
+            .FirstOrDefault(u => u.Email == email && u.PasswordHash == passwordHash);
+        id = user is null ? Guid.Empty : user.Id;
+        return user is not null;
+    }
 }

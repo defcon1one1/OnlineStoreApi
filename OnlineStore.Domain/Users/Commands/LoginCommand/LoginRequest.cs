@@ -1,4 +1,2 @@
 ﻿namespace OnlineStore.Domain.Users.Commands.LoginCommand;
-public class LoginRequest
-{
-}
+public record LoginRequest(string Email, string Password);

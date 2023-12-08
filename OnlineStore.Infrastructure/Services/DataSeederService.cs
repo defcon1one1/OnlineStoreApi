@@ -13,9 +13,9 @@ internal class DataSeederService(AppDbContext dbContext) : IDataSeederService
         {
             List<UserEntity> users =
             [
-                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Email = "customer@mail.com", PasswordHash = "hashedpassword", Role = UserRole.Customer },
-                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111112"), Email = "employee@mail.com", PasswordHash = "hashedpassword", Role = UserRole.Employee },
-                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111113"), Email = "admin@mail.com", PasswordHash = "hashedpassword", Role = UserRole.Admin }
+                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Email = "customer@mail.com", PasswordHash = "b041c0aeb35bb0fa4aa668ca5a920b590196fdaf9a00eb852c9b7f4d123cc6d6", Role = UserRole.Customer },
+                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111112"), Email = "employee@mail.com", PasswordHash = "b041c0aeb35bb0fa4aa668ca5a920b590196fdaf9a00eb852c9b7f4d123cc6d6", Role = UserRole.Employee },
+                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111113"), Email = "admin@mail.com", PasswordHash = "b041c0aeb35bb0fa4aa668ca5a920b590196fdaf9a00eb852c9b7f4d123cc6d6", Role = UserRole.Admin }
             ];
             await _dbContext.Users.AddRangeAsync(users);
             await _dbContext.SaveChangesAsync();
