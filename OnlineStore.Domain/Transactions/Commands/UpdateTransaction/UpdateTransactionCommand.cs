@@ -11,6 +11,7 @@ public class UpdateTransactionCommandHandler(ITransactionRepository transactionR
     public async Task<bool> Handle(UpdateTransactionCommand request, CancellationToken cancellationToken)
     {
         Transaction? transactionToUpdate = await _transactionRepository.GetByIdAsync(request.TransactionId, cancellationToken);
+
         if (transactionToUpdate is null) return false;
 
         if (request.IsAccepted) await _transactionRepository.AcceptAsync(request.TransactionId);

@@ -1,3 +1,4 @@
+using OnlineStore.Api.Middleware;
 using OnlineStore.Domain.Extensions;
 using OnlineStore.Domain.Interfaces.Shared;
 using OnlineStore.Infrastructure.Extensions;
@@ -11,6 +12,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +35,7 @@ using (var scope = app.Services.CreateScope())
     // Call the Seed method
     await seederService.Seed();
 }
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.Run();
 

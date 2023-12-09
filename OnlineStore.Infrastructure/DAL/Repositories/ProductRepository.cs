@@ -55,4 +55,9 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
     {
         return await _dbContext.Products.FindAsync(id);
     }
+
+    public async Task<bool> NameExistsAsync(string name)
+    {
+        return await _dbContext.Products.AnyAsync(p => p.Name == name);
+    }
 }

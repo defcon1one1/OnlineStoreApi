@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Domain.Models;
+using OnlineStore.Domain.Products.Queries.GetProductById;
 using OnlineStore.Domain.Transactions.Commands.AddTransaction;
 using OnlineStore.Domain.Transactions.Commands.UpdateTransaction;
 using OnlineStore.Domain.Transactions.Queries.GetAllTransactions;
@@ -15,6 +16,7 @@ namespace OnlineStore.Api.Controllers;
 public class TransactionsController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
+    private readonly decimal _minimumOfferToOriginalPriceRatio = 0.5m; // set minimum price offer ratio
 
     [HttpGet]
     [Authorize(Roles = "Employee,Admin")]
@@ -51,7 +53,7 @@ public class TransactionsController(IMediator mediator) : ControllerBase
         return Forbid();
     }
     [HttpPost]
-    [Authorize(Roles = "Customer")]
+    [Authorize]
     public async Task<IActionResult> Add([FromBody] AddTransactionData addTransactionData)
     {
         Claim? userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier);
@@ -59,8 +61,23 @@ public class TransactionsController(IMediator mediator) : ControllerBase
         {
             return Unauthorized();
         }
-        Guid? transactionId = await _mediator.Send(new AddTransactionCommand(addTransactionData, userId));
-        return transactionId.HasValue ? CreatedAtAction(nameof(Add), transactionId) : BadRequest();
+        Product? product = await _mediator.Send(new GetProductByIdQuery(addTransactionData.ProductId));
+
+        if (product is null) return NotFound();
+
+        decimal minimumPrice = product.Price * _minimumOfferToOriginalPriceRatio;
+        if (addTransactionData.Offer < minimumPrice)
+        {
+            return BadRequest($"Price for this product must be at least {minimumPrice}.");
+        }
+        if (addTransactionData.Offer > product.Price)
+        {
+            return BadRequest($"Transaction offer cannot be higher than the original price ({product.Price}).");
+        }
+
+        Transaction transactionToAdd = new(Guid.NewGuid(), product.Id, addTransactionData.Offer, userId, product.Price);
+        return CreatedAtAction(nameof(Add), transactionToAdd.TransactionId);
+
     }
     [HttpPatch("{id}")]
     [Authorize(Roles = "Employee,Admin")]
