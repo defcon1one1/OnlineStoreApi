@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Domain.Users.Dtos;
 
 namespace OnlineStore.Domain.Users.Queries.GetUserById;

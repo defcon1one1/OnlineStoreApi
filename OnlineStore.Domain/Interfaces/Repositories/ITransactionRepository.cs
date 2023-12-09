@@ -1,6 +1,6 @@
 ﻿using OnlineStore.Domain.Models;
 
-namespace OnlineStore.Domain.Repositories;
+namespace OnlineStore.Domain.Interfaces.Repositories;
 public interface ITransactionRepository
 {
     Task<List<Transaction>> GetAllAsync(CancellationToken cancellationToken);

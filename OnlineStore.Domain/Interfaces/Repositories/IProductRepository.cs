@@ -1,6 +1,6 @@
 ﻿using OnlineStore.Domain.Models;
 
-namespace OnlineStore.Domain.Repositories;
+namespace OnlineStore.Domain.Interfaces.Repositories;
 public interface IProductRepository
 {
     Task<List<Product>> GetAllAsync(string searchPhrase, CancellationToken cancellationToken);

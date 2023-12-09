@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 
 namespace OnlineStore.Domain.Products.Commands.UpdateProduct;
 internal class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>

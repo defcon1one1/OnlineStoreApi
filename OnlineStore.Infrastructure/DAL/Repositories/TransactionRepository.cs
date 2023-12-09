@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Infrastructure.Entities;
 using OnlineStore.Infrastructure.Exceptions;
 

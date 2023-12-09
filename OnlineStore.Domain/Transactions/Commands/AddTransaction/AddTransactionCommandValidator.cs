@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
+using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Repositories;
 using OnlineStore.Domain.Transactions.Commands.AddTransaction;
 
 internal class AddTransactionCommandValidator : AbstractValidator<AddTransactionCommand>

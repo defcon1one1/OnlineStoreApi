@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 
 namespace OnlineStore.Domain.Products.Commands.UpdateProduct;
 public record UpdateProductCommand(Guid Id, UpdateProductData UpdateProductData) : IRequest<bool>;

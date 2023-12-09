@@ -1,6 +1,6 @@
 ﻿using OnlineStore.Domain.Models;
 
-namespace OnlineStore.Domain.Repositories;
+namespace OnlineStore.Domain.Interfaces.Repositories;
 public interface IUserRepository
 {
     Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken);

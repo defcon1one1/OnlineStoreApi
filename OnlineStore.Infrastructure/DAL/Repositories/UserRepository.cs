@@ -1,5 +1,5 @@
 ﻿using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Infrastructure.Entities;
 
 namespace OnlineStore.Infrastructure.DAL.Repositories;

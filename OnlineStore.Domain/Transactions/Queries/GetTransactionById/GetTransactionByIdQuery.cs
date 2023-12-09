@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 
 namespace OnlineStore.Domain.Transactions.Queries.GetTransactionById;
 public record GetTransactionByIdQuery(Guid Id) : IRequest<Transaction?>;

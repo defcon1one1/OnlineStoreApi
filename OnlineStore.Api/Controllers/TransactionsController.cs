@@ -86,5 +86,11 @@ public class TransactionsController(IMediator mediator) : ControllerBase
         bool success = await _mediator.Send(new UpdateTransactionCommand(id, isAccepted));
         return success ? NoContent() : NotFound();
     }
+    [HttpPatch("{id}")]
+    [Authorize(Roles = "Customer")]
+    public async Task<IActionResult> Revise([FromRoute] Guid id, [FromBody] decimal offer)
+    {
+
+    }
 
 }

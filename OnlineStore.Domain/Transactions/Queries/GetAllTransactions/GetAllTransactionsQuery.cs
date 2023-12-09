@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 
 namespace OnlineStore.Domain.Transactions.Queries.GetAllTransactions;
 public record GetAllTransactionsQuery() : IRequest<IReadOnlyCollection<Transaction>>;

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 
 namespace OnlineStore.Domain.Products.Queries.GetAllProducts;
 public record GetAllProductsQuery(string SearchPhrase) : IRequest<IReadOnlyCollection<Product>>;

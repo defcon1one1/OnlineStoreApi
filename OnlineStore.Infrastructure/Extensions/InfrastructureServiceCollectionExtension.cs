@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OnlineStore.Domain.Interfaces.Shared;
-using OnlineStore.Domain.Repositories;
+using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Infrastructure.DAL;
 using OnlineStore.Infrastructure.DAL.Repositories;
 using OnlineStore.Infrastructure.Services;
