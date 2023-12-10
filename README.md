@@ -6,7 +6,7 @@ The OnlineStore project is a web API built using ASP.NET Core, following the CQR
 ### Important notes
 This project was developed for a recruitment challenge. While efforts have been made to address various scenarios, there are opportunities for further enhancements.
 
-### External packaged used
+### External packages used
 * MediatR
 * Fluent Validation
 * Fluent Assertions
