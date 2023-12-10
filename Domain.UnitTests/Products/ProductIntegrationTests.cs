@@ -7,12 +7,8 @@ using OnlineStore.Infrastructure.Exceptions;
 namespace Domain.UnitTests.Products;
 public class ProductIntegrationTests
 {
-    private readonly Mock<IProductRepository> _productRepositoryMock;
+    private readonly Mock<IProductRepository> _productRepositoryMock = new();
 
-    public ProductIntegrationTests()
-    {
-        _productRepositoryMock = new();
-    }
     [Fact]
     public async Task Add_Should_ReturnValidGuidWhenCorrectData()
     {

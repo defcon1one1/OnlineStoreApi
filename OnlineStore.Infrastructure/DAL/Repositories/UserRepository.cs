@@ -22,7 +22,7 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
 
     public List<Transaction> GetUserTransactions(Guid id)
     {
-        List<TransactionEntity> transactionEntities = [.. _dbContext.Transactions.Where(t => t.UserId == id)];
+        List<TransactionEntity> transactionEntities = [.. _dbContext.Transactions.Where(t => t.CustomerId == id)];
         return transactionEntities.Select(t => t.ToTransaction()).ToList();
     }
 }

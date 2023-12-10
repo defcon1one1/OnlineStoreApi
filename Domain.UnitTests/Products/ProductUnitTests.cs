@@ -16,6 +16,6 @@ public class ProductUnitTests
         Action act = () => new Product(id, "test", "desc", price);
 
         // Assert
-        act.Should().Throw<ArgumentException>().WithMessage("Price must be grdeater than 0.");
+        act.Should().Throw<ArgumentException>().WithMessage("Price must be greater than 0.");
     }
 }

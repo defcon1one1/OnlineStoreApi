@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OnlineStore.Domain.Models;
 using OnlineStore.Domain.Interfaces.Repositories;
+using OnlineStore.Domain.Models;
 using OnlineStore.Infrastructure.Entities;
 using OnlineStore.Infrastructure.Exceptions;
 
@@ -56,7 +56,10 @@ public class TransactionRepository(AppDbContext dbContext) : ITransactionReposit
         if (transactionEntity.Status is not TransactionStatus.Pending) throw new DatabaseOperationException("Reject operation failed: transaction is currently not pending.");
         try
         {
-            transactionEntity.Status = transactionEntity.Revisions <= 3 ? TransactionStatus.Rejected : TransactionStatus.Closed;
+            transactionEntity.Status =
+                transactionEntity.Revisions <= 3 ?
+                TransactionStatus.Rejected :
+                TransactionStatus.Closed;
             _dbContext.Transactions.Update(transactionEntity);
             await _dbContext.SaveChangesAsync();
         }
@@ -66,7 +69,7 @@ public class TransactionRepository(AppDbContext dbContext) : ITransactionReposit
         }
     }
 
-    public async Task ReviseAsync(Guid transactionId, decimal price)
+    public async Task ReviseAsync(Guid transactionId, decimal newOffer)
     {
         TransactionEntity transactionEntity = await GetEntityByIdAsync(transactionId) ?? throw new DatabaseOperationException("Revise operation failed: transaction not found.");
         if (transactionEntity.Status == TransactionStatus.Pending) throw new DatabaseOperationException("Revise operation failed: transaction is currently pending.");

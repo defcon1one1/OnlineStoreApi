@@ -14,5 +14,6 @@ public class ReviseTransactionCommandHandler(ITransactionRepository transactionR
         if (transactionToRevise is null) return null;
 
         await _transactionRepository.ReviseAsync(request.TransactionId, request.Offer);
+        return transactionToRevise;
     }
 }

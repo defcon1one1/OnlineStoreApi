@@ -12,7 +12,7 @@ public class TransactionUnitTests
         decimal offer = 0;
 
         // Act & Assert
-        Action act = () => new Transaction(id, id, offer, id, 100);
+        Action act = () => new Transaction(id, id, id, offer, 150);
 
         // Assert
         act.Should().Throw<ArgumentException>().WithMessage("Offer must be greater than 0 and less than original price.");
@@ -26,7 +26,7 @@ public class TransactionUnitTests
         decimal originalPrice = 100;
 
         // Act & Assert
-        Action act = () => new Transaction(id, id, offer, id, originalPrice);
+        Action act = () => new Transaction(id, id, id, offer, originalPrice);
 
         // Assert
         act.Should().Throw<ArgumentException>().WithMessage("Offer must be greater than 0 and less than original price.");

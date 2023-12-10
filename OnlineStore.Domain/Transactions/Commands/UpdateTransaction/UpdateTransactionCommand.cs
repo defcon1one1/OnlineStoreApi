@@ -12,7 +12,7 @@ public class UpdateTransactionCommandHandler(ITransactionRepository transactionR
     {
         Transaction? transactionToUpdate = await _transactionRepository.GetByIdAsync(request.TransactionId, cancellationToken);
 
-        if (transactionToUpdate is null || !request.IsAccepted) return false;
+        if (transactionToUpdate is null) return false;
 
         if (request.IsAccepted) await _transactionRepository.AcceptAsync(request.TransactionId);
         else await _transactionRepository.RejectAsync(request.TransactionId);

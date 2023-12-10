@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Products.Queries.GetProductById;
 using OnlineStore.Domain.Transactions.Commands.AddTransaction;
+using OnlineStore.Domain.Transactions.Commands.ReviseTransaction;
 using OnlineStore.Domain.Transactions.Commands.UpdateTransaction;
 using OnlineStore.Domain.Transactions.Queries.GetAllTransactions;
 using OnlineStore.Domain.Transactions.Queries.GetTransactionById;
@@ -16,7 +16,6 @@ namespace OnlineStore.Api.Controllers;
 public class TransactionsController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
-    private readonly decimal _minimumOfferToOriginalPriceRatio = 0.5m; // set minimum price offer ratio
 
     [HttpGet]
     [Authorize(Roles = "Employee,Admin")]
@@ -42,15 +41,12 @@ public class TransactionsController(IMediator mediator) : ControllerBase
             return NotFound();
         }
 
-
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-        if (User.IsInRole("Admin") || User.IsInRole("Employee") || userId == transaction.CustomerId)
+        if (!User.IsInRole("Admin") && !User.IsInRole("Employee") && userId != transaction.CustomerId)
         {
-            return Ok(transaction);
+            return NotFound();
         }
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-        return Forbid();
+        return Ok(transaction);
     }
     [HttpPost]
     [Authorize]
@@ -61,24 +57,12 @@ public class TransactionsController(IMediator mediator) : ControllerBase
         {
             return Unauthorized();
         }
-        Product? product = await _mediator.Send(new GetProductByIdQuery(addTransactionData.ProductId));
-
-        if (product is null) return NotFound();
-
-        decimal minimumPrice = product.Price * _minimumOfferToOriginalPriceRatio;
-        if (addTransactionData.Offer < minimumPrice)
-        {
-            return BadRequest($"Price for this product must be at least {minimumPrice}.");
-        }
-        if (addTransactionData.Offer > product.Price)
-        {
-            return BadRequest($"Transaction offer cannot be higher than the original price ({product.Price}).");
-        }
-
-        Transaction transactionToAdd = new(Guid.NewGuid(), product.Id, addTransactionData.Offer, userId, product.Price);
-        return CreatedAtAction(nameof(Add), transactionToAdd.TransactionId);
+        Guid? createdId = await _mediator.Send(new AddTransactionCommand(addTransactionData, userId), CancellationToken.None);
+        return createdId.HasValue ? Ok(createdId.Value) : BadRequest();
 
     }
+
+
     [HttpPatch("{id}")]
     [Authorize(Roles = "Employee,Admin")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromQuery] bool isAccepted)
@@ -86,11 +70,33 @@ public class TransactionsController(IMediator mediator) : ControllerBase
         bool success = await _mediator.Send(new UpdateTransactionCommand(id, isAccepted));
         return success ? NoContent() : NotFound();
     }
-    [HttpPatch("{id}")]
-    [Authorize(Roles = "Customer")]
+
+
+    [HttpPatch("{id}/revise")]
+    [Authorize]
     public async Task<IActionResult> Revise([FromRoute] Guid id, [FromBody] decimal offer)
     {
+        Transaction? transaction = await _mediator.Send(new ReviseTransactionCommand(id, offer));
 
+        if (transaction is null)
+        {
+            return NotFound();
+        }
+
+        Claim? userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim is null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
+        {
+            return Unauthorized();
+        }
+
+        if (transaction?.CustomerId != userId)
+        {
+            return NotFound();
+        }
+
+        return transaction is null ? NotFound() : Ok(transaction);
     }
+
 
 }

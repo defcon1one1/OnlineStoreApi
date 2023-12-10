@@ -9,13 +9,14 @@ internal class DataSeederService(AppDbContext dbContext) : IDataSeederService
     private readonly AppDbContext _dbContext = dbContext;
     public async Task Seed() // Guid values are pre-determined for development & testing purposes
     {
+        // actual passwords are: customer123, employee123, admin123
         if (!_dbContext.Users.Any())
         {
             List<UserEntity> users =
             [
                 new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Email = "customer@mail.com", PasswordHash = "b041c0aeb35bb0fa4aa668ca5a920b590196fdaf9a00eb852c9b7f4d123cc6d6", Role = UserRole.Customer },
-                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111112"), Email = "employee@mail.com", PasswordHash = "b041c0aeb35bb0fa4aa668ca5a920b590196fdaf9a00eb852c9b7f4d123cc6d6", Role = UserRole.Employee },
-                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111113"), Email = "admin@mail.com", PasswordHash = "b041c0aeb35bb0fa4aa668ca5a920b590196fdaf9a00eb852c9b7f4d123cc6d6", Role = UserRole.Admin }
+                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111112"), Email = "employee@mail.com", PasswordHash = "5b2f8e27e2e5b4081c03ce70b288c87bd1263140cbd1bd9ae078123509b7caff", Role = UserRole.Employee },
+                new UserEntity { Id = Guid.Parse("11111111-1111-1111-1111-111111111113"), Email = "admin@mail.com", PasswordHash = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9", Role = UserRole.Admin }
             ];
             await _dbContext.Users.AddRangeAsync(users);
             await _dbContext.SaveChangesAsync();
@@ -46,7 +47,7 @@ internal class DataSeederService(AppDbContext dbContext) : IDataSeederService
                     {
                         TransactionId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                         ProductId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                        UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                        CustomerId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                         OriginalPrice = 79.99M,
                         CustomerOffer = 69.99M,
                         Revisions = 1,
@@ -56,7 +57,7 @@ internal class DataSeederService(AppDbContext dbContext) : IDataSeederService
                 {
                     TransactionId = Guid.Parse("11111111-1111-1111-1111-111111111112"),
                     ProductId = Guid.Parse("11111111-1111-1111-1111-111111111112"),
-                    UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    CustomerId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                     OriginalPrice = 3999.99M,
                     CustomerOffer = 3599.99M,
                     Revisions = 2,
@@ -66,7 +67,7 @@ internal class DataSeederService(AppDbContext dbContext) : IDataSeederService
                 {
                     TransactionId = Guid.Parse("11111111-1111-1111-1111-111111111113"),
                     ProductId = Guid.Parse("11111111-1111-1111-1111-111111111113"),
-                    UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    CustomerId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                     OriginalPrice = 149.99M,
                     CustomerOffer = 80.00M,
                     Revisions = 3,

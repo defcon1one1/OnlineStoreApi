@@ -5,7 +5,7 @@ public class TransactionEntity
 {
     public Guid TransactionId { get; set; }
     public Guid ProductId { get; set; }
-    public Guid UserId { get; set; }
+    public Guid CustomerId { get; set; }
     public decimal OriginalPrice { get; set; }
     public decimal CustomerOffer { get; set; }
     public int Revisions { get; set; }
@@ -13,7 +13,7 @@ public class TransactionEntity
 
     public Transaction ToTransaction()
     {
-        return new Transaction(TransactionId, ProductId, CustomerOffer, UserId, Status, OriginalPrice);
+        return new Transaction(TransactionId, ProductId, CustomerId, CustomerOffer, OriginalPrice, Revisions, Status);
     }
     public static TransactionEntity FromTransaction(Transaction transaction)
     {
@@ -21,9 +21,10 @@ public class TransactionEntity
         {
             TransactionId = transaction.TransactionId,
             ProductId = transaction.ProductId,
-            UserId = transaction.CustomerId,
+            CustomerId = transaction.CustomerId,
             OriginalPrice = transaction.OriginalPrice,
             CustomerOffer = transaction.CustomerOffer,
+            Revisions = transaction.Revisions,
             Status = transaction.Status
         };
     }
