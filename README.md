@@ -47,7 +47,7 @@ There are 3 users created within `OnlineStore.Infrastructure.Services.DatabaseSe
   "userId": "1111111-111111-11111-111111111"
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
 }
-
+```
 
 # Product Controller Endpoints
 ## `GET /api/product`
