@@ -34,7 +34,7 @@ There are 3 users created within `OnlineStore.Infrastructure.Services.DatabaseSe
   ```json
   {
     "email": "customer123@mail.com",
-    "password": "cusotmer123"
+    "password": "customer123"
   }
   ```
 - **Response:** `Ok (200)` with the login response if successful, `Unauthorized (401)` otherwise. The response includes a flag indicating success and additional information.
@@ -44,12 +44,8 @@ There are 3 users created within `OnlineStore.Infrastructure.Services.DatabaseSe
 ```json
 {
   "success": true,
+  "userId": "1111111-111111-11111-111111111"
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-}
-```
-{
-  "email": "user@example.com",
-  "password": "password123"
 }
 
 
